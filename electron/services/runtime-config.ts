@@ -35,7 +35,7 @@ export const RUNTIME_CONFIGS: Readonly<Record<ServerId, RuntimeConfig>> = Object
   game2: Object.freeze({
     id: "game2",
     environment: "production",
-    label: "ROTK GAME 2",
+    label: "ROTK LIVE",
     // The Gateway moved off :80 so Nginx can own it for the website. Nothing in
     // the client requires 80 — it only ever learns this URL from here, and the
     // port travels with it into every derived value below.

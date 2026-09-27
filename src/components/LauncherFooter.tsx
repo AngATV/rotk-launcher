@@ -77,7 +77,7 @@ export function LauncherFooter({
   const installing = snapshot.phase === "installing";
   const needsAccountKey = snapshot.phase === "ready" && !snapshot.playerIdentity.configured;
   const primaryLabel = ready
-    ? "PLAY"
+    ? copy.footer.play
     : running
       ? copy.footer.inGame
       : installing
@@ -117,7 +117,7 @@ export function LauncherFooter({
         disabled={busy || running || installing}
         onClick={onPrimary}
       >
-        <span>{primaryLabel}</span>
+        <span className="play-button__copy"><small>RETURN OF THE KING</small><strong>{primaryLabel}</strong></span>
         <Play size={24} fill="currentColor" />
       </button>
     </footer>

@@ -11,7 +11,7 @@ import {
 describe("public ROTK runtime", () => {
   it("targets the GAME 2 gateway and every public login listener", () => {
     expect(DEFAULT_RUNTIME_CONFIG.environment).toBe("production");
-    expect(DEFAULT_RUNTIME_CONFIG.label).toBe("ROTK GAME 2");
+    expect(DEFAULT_RUNTIME_CONFIG.label).toBe("ROTK LIVE");
     // The Gateway moved off :80 so Nginx can own it for the website; the port
     // must travel into every URL the client is handed.
     expect(DEFAULT_RUNTIME_CONFIG.gatewayOrigin).toBe("http://162.19.94.95:8080");

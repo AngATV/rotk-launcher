@@ -34,6 +34,9 @@ export interface Copy {
     closeError: string;
   };
   news: {
+    headline: string;
+    latest: string;
+    fallbackTitle: string;
     fallbackSummary: string;
     fallbackCategory: string;
     label: string;
@@ -47,6 +50,7 @@ export interface Copy {
     next: string;
   };
   footer: {
+    play: string;
     inGame: string;
     process: string;
     activeProcess: string;
@@ -197,6 +201,9 @@ const COPY: Record<AppLocale, Copy> = {
       closeError: "Close",
     },
     news: {
+      headline: "RETURN TO THE FIGHT.",
+      latest: "LATEST TRANSMISSION",
+      fallbackTitle: "STAY IN THE LOOP",
       fallbackSummary: "The development feed is temporarily unavailable. The launcher remains available offline.",
       fallbackCategory: "DEVELOPMENT",
       label: "Latest ROTK news",
@@ -210,6 +217,7 @@ const COPY: Record<AppLocale, Copy> = {
       next: "Next news item",
     },
     footer: {
+      play: "PLAY",
       inGame: "IN GAME",
       process: "PROCESS",
       activeProcess: "ACTIVE PROCESS",
@@ -390,6 +398,9 @@ const COPY: Record<AppLocale, Copy> = {
       closeError: "Fermer",
     },
     news: {
+      headline: "RETOUR AU COMBAT.",
+      latest: "DERNIÈRES ACTUALITÉS",
+      fallbackTitle: "SUIVEZ LE DÉVELOPPEMENT",
       fallbackSummary: "Le flux de développement est momentanément indisponible. Le launcher reste utilisable hors ligne.",
       fallbackCategory: "DÉVELOPPEMENT",
       label: "Dernières actualités ROTK",
@@ -403,6 +414,7 @@ const COPY: Record<AppLocale, Copy> = {
       next: "Actualité suivante",
     },
     footer: {
+      play: "JOUER",
       inGame: "EN JEU",
       process: "PROCESSUS",
       activeProcess: "PROCESSUS ACTIF",

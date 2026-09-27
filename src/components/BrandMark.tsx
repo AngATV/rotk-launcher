@@ -1,21 +1,17 @@
-import { Crown } from "lucide-react";
-
 interface BrandMarkProps {
   compact?: boolean;
 }
 
 export function BrandMark({ compact = false }: BrandMarkProps) {
   return (
-    <div className="brand-mark" aria-label="Return of the King">
-      <span className="brand-mark__crown" aria-hidden="true">
-        <Crown size={20} strokeWidth={2.35} />
-      </span>
-      {!compact && (
-        <div className="brand-mark__type">
-          <span>RETURN OF THE</span>
-          <strong>KING</strong>
-        </div>
-      )}
+    <div className={`brand-mark${compact ? " brand-mark--compact" : ""}`}>
+      <img
+        className="brand-mark__image"
+        src={compact ? "./branding/rotk-mark.svg" : "./branding/rotk-wordmark-red-skull.svg"}
+        alt="ROTK — Return of the King"
+        draggable={false}
+      />
+      {!compact && <span className="brand-mark__caption">RETURN OF THE KING</span>}
     </div>
   );
 }

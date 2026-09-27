@@ -18,14 +18,14 @@ function snapshot(overrides: Partial<LauncherSnapshot> = {}): LauncherSnapshot {
     runtime: {
       serverId: "game2",
       environment: "development",
-      label: "ROTK GAME 2",
+      label: "ROTK LIVE",
       websiteOrigin: "https://rotk.app",
       players: 12,
       capacity: 150,
       servers: [
         {
           id: "game2",
-          label: "ROTK GAME 2",
+          label: "ROTK LIVE",
           environment: "production",
           websiteOrigin: "https://rotk.app",
           players: 12,

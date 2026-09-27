@@ -1200,6 +1200,7 @@ function createWindow(): BrowserWindow {
     frame: false,
     backgroundColor: "#090909",
     title: "ROTK Launcher",
+    icon: join(app.getAppPath(), app.isPackaged ? "dist" : "public", "branding", "rotk-mark.png"),
     webPreferences: {
       preload: join(currentDirectory, "preload.cjs"),
       contextIsolation: true,

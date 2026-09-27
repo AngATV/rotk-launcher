@@ -1,19 +1,37 @@
+@font-face {
+  font-family: "Eurostile";
+  src: url("../../public/branding/fonts/eurostile-regular.ttf") format("truetype");
+  font-weight: 400 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Eurostile";
+  src: url("../../public/branding/fonts/eurostile-black.ttf") format("truetype");
+  font-weight: 600 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   font-family: "Inter", sans-serif;
-  color: #eeece4;
-  background: #090909;
+  color: #ffffff;
+  background: #060606;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --ink: #090909;
-  --surface: #10100f;
-  --surface-2: #171716;
-  --paper: #eeece4;
-  --paper-dim: #c8c4ba;
-  --muted: #96948d;
-  --signal: #e64034;
-  --signal-dark: #b92c24;
-  --line: rgba(238, 236, 228, 0.14);
+  --ink: #060606;
+  --surface: #0d0d0d;
+  --surface-2: #1a1a1a;
+  --paper: #ffffff;
+  --paper-dim: #d9d9d9;
+  --muted: #929292;
+  --signal: #e10600;
+  --signal-dark: #880000;
+  --line: rgba(255, 255, 255, 0.14);
   --footer-height: 112px;
+  --display: "Eurostile", "Arial", sans-serif;
+  --gutter: 44px;
 }
 
 * {
@@ -47,9 +65,9 @@ button:focus-visible {
   justify-items: center;
   gap: 18px;
   background:
-    radial-gradient(circle at 50% 45%, rgba(230, 64, 52, 0.12), transparent 30%),
+    radial-gradient(circle at 50% 45%, rgba(225, 6, 0, 0.12), transparent 30%),
     var(--ink);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-weight: 600;
   letter-spacing: 0.14em;
   font-size: 12px;
@@ -87,7 +105,7 @@ button:focus-visible {
   display: flex;
   align-items: stretch;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(238, 236, 228, 0.11);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.11);
   background: linear-gradient(180deg, rgba(9, 9, 9, 0.93), rgba(9, 9, 9, 0.52));
 }
 
@@ -103,37 +121,15 @@ button:focus-visible {
 
 .brand-mark {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  flex-shrink: 0;
 }
 
-.brand-mark__crown {
-  width: 35px;
-  height: 35px;
-  display: grid;
-  place-items: center;
-  color: var(--signal);
-  transform: rotate(-6deg);
-}
-
-.brand-mark__type {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-  font-family: "Barlow Condensed", sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  line-height: 1;
-  color: var(--paper-dim);
-}
-
-.brand-mark__type strong {
-  color: var(--signal);
-  font-size: 19px;
-  font-weight: 700;
-}
+.brand-mark__image { display: block; width: 120px; height: 35px; object-fit: contain; }
+.brand-mark__caption { color: var(--paper-dim); font-family: var(--display); font-size: 7px; letter-spacing: .21em; text-align: center; }
+.brand-mark--compact .brand-mark__image { width: 30px; height: 36px; }
 
 .window-chrome__division {
   width: 1px;
@@ -143,7 +139,7 @@ button:focus-visible {
 
 .window-chrome__section,
 .chrome-version {
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-weight: 600;
   letter-spacing: 0.13em;
   color: var(--muted);
@@ -164,7 +160,7 @@ button:focus-visible {
   border: 0;
   border-left: 1px solid var(--line);
   background: transparent;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-weight: 600;
   font-size: 12px;
   letter-spacing: 0.11em;
@@ -196,7 +192,7 @@ button:focus-visible {
   justify-content: center;
   gap: 7px;
   color: var(--paper-dim);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -236,7 +232,7 @@ button:focus-visible {
   right: 8px;
   width: 204px;
   padding: 5px;
-  border: 1px solid rgba(238, 236, 228, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(15, 15, 14, 0.98);
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.46);
   backdrop-filter: blur(12px);
@@ -277,7 +273,7 @@ button:focus-visible {
 }
 
 .language-picker__menu button > span:nth-child(2) {
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -285,7 +281,7 @@ button:focus-visible {
 
 .language-picker__menu small {
   color: var(--muted);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 9px;
   letter-spacing: 0.11em;
 }
@@ -342,191 +338,61 @@ button:focus-visible {
   color: white;
 }
 
+/* The adapted artwork stays fully in frame while news changes independently. */
 .news-carousel {
   position: absolute;
   z-index: 1;
   inset: 0 0 var(--footer-height);
   overflow: hidden;
-  background:
-    radial-gradient(circle at 72% 30%, rgba(230, 64, 52, 0.18), transparent 32%),
-    linear-gradient(125deg, #242421, #0a0a09 66%);
+  background: var(--ink);
 }
 
-.news-carousel__visual,
-.news-carousel__image-layer,
-.news-carousel__shade,
-.news-carousel__grain {
+.news-carousel__visual, .news-carousel__shade { position: absolute; inset: 0; pointer-events: none; }
+.news-carousel__key-art {
   position: absolute;
-  inset: 0;
+  /* Fit the whole composition between the chrome and footer. The right gutter
+     keeps the muzzle flash clear of the window edge at every supported size. */
+  inset: 72px 24px 12px 8%;
+  background: url("../../public/branding/rotk-launcher-art.png") right top / contain no-repeat;
 }
-
-.news-carousel__image-layer img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 42%;
-  filter: saturate(0.8) contrast(1.08) brightness(0.86);
-}
-
 .news-carousel__shade {
-  background:
-    linear-gradient(90deg, rgba(4, 4, 4, 0.94) 0%, rgba(4, 4, 4, 0.64) 38%, rgba(4, 4, 4, 0.12) 73%),
-    linear-gradient(0deg, rgba(5, 5, 5, 0.7), transparent 48%),
-    linear-gradient(180deg, rgba(5, 5, 5, 0.38), transparent 28%);
+  background: linear-gradient(90deg, #060606 18%, rgba(6,6,6,.78) 36%, transparent 62%),
+    linear-gradient(0deg, #060606 0%, rgba(6,6,6,.94) 12%, transparent 48%);
 }
 
-.news-carousel__grain {
-  opacity: 0.18;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
-}
+.launcher-brand { position: absolute; top: clamp(115px, 18vh, 154px); left: var(--gutter); width: 53%; }
+.launcher-brand__eyebrow { display: flex; align-items: center; gap: 14px; font-family: var(--display); font-size: 10px; font-weight: 600; letter-spacing: .12em; color: var(--paper-dim); }
+.launcher-brand__eyebrow i { height: 1px; width: 30px; background: var(--signal); }
+.launcher-brand h1 { margin: 20px 0 17px; }
+.launcher-brand h1 img { display: block; width: 100%; max-width: 600px; height: auto; }
+.launcher-brand p { margin: 0; font-family: var(--display); font-size: clamp(20px, 2.15vw, 30px); font-weight: 700; line-height: 1.2; letter-spacing: .025em; }
 
-.news-carousel__content {
-  position: absolute;
-  z-index: 3;
-  left: clamp(52px, 6vw, 86px);
-  bottom: clamp(55px, 8vh, 84px);
-  width: min(650px, 58vw);
-}
-
-.news-carousel__meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 17px;
-  font-family: "Barlow Condensed", sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  color: var(--paper-dim);
-}
-
-.news-carousel__meta > span:first-child {
-  color: var(--signal);
-}
-
-.news-carousel__meta i {
-  width: 28px;
-  height: 1px;
-  background: rgba(238, 236, 228, 0.32);
-}
-
-.news-carousel__content h1 {
-  max-width: 640px;
-  margin: 0;
-  font-family: "Barlow Condensed", sans-serif;
-  font-size: clamp(48px, 5.2vw, 76px);
-  font-weight: 700;
-  line-height: 0.91;
-  letter-spacing: -0.025em;
-  text-transform: uppercase;
-  text-wrap: balance;
-  text-shadow: 0 8px 35px rgba(0, 0, 0, 0.48);
-}
-
-.news-carousel__content p {
-  max-width: 585px;
-  margin: 22px 0 24px;
-  color: var(--paper-dim);
-  font-size: 14px;
-  line-height: 1.62;
-  text-wrap: pretty;
-}
-
-.editorial-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 0 0 8px;
-  border: 0;
-  border-bottom: 2px solid var(--signal);
-  background: transparent;
-  font-family: "Barlow Condensed", sans-serif;
-  font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 0.12em;
-  cursor: pointer;
-  transition: gap 180ms ease, color 180ms ease;
-}
-
-.editorial-link:hover {
-  gap: 14px;
-  color: var(--signal);
-}
-
-.news-carousel__rail {
-  position: absolute;
-  z-index: 4;
-  top: 104px;
-  right: 34px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 17px;
-}
-
-.news-carousel__count {
-  font-family: "Barlow Condensed", sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.11em;
-  color: var(--paper);
-}
-
-.news-carousel__count i {
-  margin: 0 5px;
-  color: var(--signal);
-  font-style: normal;
-}
-
-.news-carousel__dots {
-  display: flex;
-  gap: 6px;
-}
-
-.news-carousel__dots button {
-  width: 22px;
-  height: 3px;
-  padding: 0;
-  border: 0;
-  background: rgba(238, 236, 228, 0.28);
-  cursor: pointer;
-  transition: width 180ms ease, background 180ms ease;
-}
-
-.news-carousel__dots button.is-active {
-  width: 38px;
-  background: var(--signal);
-}
-
-.news-carousel__arrows {
-  position: absolute;
-  z-index: 4;
-  right: 34px;
-  bottom: 38px;
-  display: flex;
-}
-
-.news-carousel__arrows button {
-  width: 48px;
-  height: 44px;
-  border: 1px solid var(--line);
-  background: rgba(9, 9, 9, 0.58);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  backdrop-filter: blur(7px);
-  transition: background 160ms ease, color 160ms ease;
-}
-
-.news-carousel__arrows button + button {
-  border-left: 0;
-}
-
-.news-carousel__arrows button:hover {
-  background: var(--paper);
-  color: var(--ink);
-}
+.news-carousel__news { position: absolute; bottom: 26px; left: var(--gutter); width: min(760px, calc(100% - 230px)); }
+.news-carousel__heading { display: flex; align-items: center; justify-content: space-between; padding-top: 17px; margin-bottom: 16px; border-top: 1px solid var(--line); font-family: var(--display); font-size: 10px; font-weight: 600; letter-spacing: .14em; color: var(--muted); }
+.news-carousel__count { font-variant-numeric: tabular-nums; color: var(--paper-dim); letter-spacing: .04em; }
+.news-carousel__count i { color: var(--signal); margin: 0 8px; font-style: normal; }
+.news-carousel__content { display: grid; grid-template-columns: 164px minmax(0, 1fr); gap: 24px; min-height: 132px; }
+.news-carousel__thumbnail { height: 112px; overflow: hidden; background: #111 url("../../public/branding/rotk-mark.svg") center / 34px 42px no-repeat; }
+.news-carousel__thumbnail img { display: block; width: 100%; height: 100%; object-fit: cover; filter: saturate(.7); transition: transform .45s ease, filter .45s ease; }
+.news-carousel__content:hover .news-carousel__thumbnail img { transform: scale(1.045); filter: saturate(1); }
+.news-carousel__copy { min-width: 0; }
+.news-carousel__meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; color: var(--muted); font-family: var(--display); font-size: 9px; font-weight: 600; letter-spacing: .08em; }
+.news-carousel__meta > span:first-child { color: #ff6862; }
+.news-carousel__meta i { width: 18px; height: 1px; background: var(--line); }
+.news-carousel__content h2 { margin: 0; font-family: var(--display); font-size: 23px; line-height: 1.15; font-weight: 700; text-transform: uppercase; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.news-carousel__content p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin: 8px 0 9px; color: #b4b4b4; font-size: 11px; line-height: 1.55; }
+.editorial-link { display: inline-flex; align-items: center; gap: 9px; padding: 2px 0 4px; border: 0; background: transparent; color: var(--paper); font-family: var(--display); font-size: 10px; font-weight: 700; letter-spacing: .06em; cursor: pointer; }
+.editorial-link svg { color: var(--signal); transition: transform .18s ease; }
+.editorial-link:hover svg { transform: translate(3px, -3px); }
+.editorial-link:hover { color: var(--paper-dim); }
+.news-carousel__controls { position: absolute; right: var(--gutter); bottom: 36px; display: flex; flex-direction: column; gap: 22px; align-items: flex-end; }
+.news-carousel__dots { display: flex; gap: 8px; }
+.news-carousel__dots button { width: 30px; height: 20px; padding: 8px 0; border: 0; background: transparent; cursor: pointer; }
+.news-carousel__dots button::after { content: ""; display: block; height: 3px; background: #555; transition: background .18s ease; }
+.news-carousel__dots button.is-active::after { background: var(--signal); }
+.news-carousel__arrows { display: flex; gap: 8px; }
+.news-carousel__arrows button { display: grid; place-items: center; width: 44px; height: 40px; border: 1px solid var(--line); background: #0d0d0d; cursor: pointer; transition: background .18s ease, color .18s ease; }
+.news-carousel__arrows button:hover { color: var(--ink); background: var(--paper); }
 
 .activity-center {
   position: absolute;
@@ -548,10 +414,10 @@ button:focus-visible {
   gap: 16px;
   padding: 17px 21px 16px 17px;
   overflow: hidden;
-  border: 1px solid rgba(238, 236, 228, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-left: 4px solid var(--signal);
   background:
-    linear-gradient(100deg, rgba(230, 64, 52, 0.09), transparent 45%),
+    linear-gradient(100deg, rgba(225, 6, 0, 0.09), transparent 45%),
     rgba(12, 12, 11, 0.94);
   box-shadow: 0 20px 55px rgba(0, 0, 0, 0.44);
   backdrop-filter: blur(14px);
@@ -572,8 +438,8 @@ button:focus-visible {
   height: 48px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(230, 64, 52, 0.34);
-  background: rgba(230, 64, 52, 0.1);
+  border: 1px solid rgba(225, 6, 0, 0.34);
+  background: rgba(225, 6, 0, 0.1);
   color: var(--signal);
 }
 
@@ -593,7 +459,7 @@ button:focus-visible {
 .activity-card__heading span {
   flex: 0 0 auto;
   color: var(--signal);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.13em;
@@ -603,7 +469,7 @@ button:focus-visible {
   min-width: 0;
   overflow: hidden;
   color: var(--paper);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 17px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -616,7 +482,7 @@ button:focus-visible {
   margin-top: 5px;
   overflow: hidden;
   color: var(--paper-dim);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 11px;
   letter-spacing: 0.035em;
   text-overflow: ellipsis;
@@ -628,14 +494,14 @@ button:focus-visible {
   height: 6px;
   margin-top: 12px;
   overflow: hidden;
-  background: rgba(238, 236, 228, 0.13);
+  background: rgba(255, 255, 255, 0.13);
 }
 
 .activity-card__track i {
   display: block;
   height: 100%;
   background: linear-gradient(90deg, var(--signal-dark), var(--signal), #f06c62);
-  box-shadow: 0 0 18px rgba(230, 64, 52, 0.5);
+  box-shadow: 0 0 18px rgba(225, 6, 0, 0.5);
   transition: width 140ms linear;
 }
 
@@ -649,7 +515,7 @@ button:focus-visible {
   gap: 17px;
   margin-top: 6px;
   color: var(--muted);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 9px;
   letter-spacing: 0.06em;
 }
@@ -674,7 +540,7 @@ button:focus-visible {
   z-index: 1;
   min-width: 54px;
   color: var(--paper);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 29px;
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -695,7 +561,7 @@ button:focus-visible {
   display: grid;
   grid-template-columns: minmax(330px, 1fr) minmax(260px, 0.68fr) 108px 250px;
   background: rgba(12, 12, 11, 0.98);
-  border-top: 1px solid rgba(238, 236, 228, 0.16);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .launcher-footer__status,
@@ -748,7 +614,7 @@ button:focus-visible {
   inset: auto 0 100% 0;
   margin-bottom: 1px;
   padding: 6px 0;
-  border: 1px solid rgba(238, 236, 228, 0.17);
+  border: 1px solid rgba(255, 255, 255, 0.17);
   background: #131312;
   box-shadow: 0 -18px 44px rgba(0, 0, 0, 0.5);
 }
@@ -768,7 +634,7 @@ button:focus-visible {
 }
 
 .server-select__group > header strong {
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -778,7 +644,7 @@ button:focus-visible {
   padding: 3px 6px;
   border: 1px solid rgba(134, 169, 110, 0.42);
   color: #a7c393;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 8px;
   font-style: normal;
   font-weight: 600;
@@ -825,14 +691,14 @@ button:focus-visible {
 }
 
 .server-select__group button span {
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 12px;
   letter-spacing: 0.1em;
 }
 
 .server-select__group button em {
   color: #a7c393;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 9px;
   font-style: normal;
   letter-spacing: 0.12em;
@@ -848,7 +714,7 @@ button:focus-visible {
   height: 8px;
   border-radius: 50%;
   background: var(--signal);
-  box-shadow: 0 0 0 5px rgba(230, 64, 52, 0.1);
+  box-shadow: 0 0 0 5px rgba(225, 6, 0, 0.1);
 }
 
 .status-pulse.is-ready {
@@ -866,7 +732,7 @@ button:focus-visible {
 
 .launcher-footer__status strong,
 .server-select__trigger strong {
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-weight: 600;
   font-size: 16px;
   letter-spacing: 0.08em;
@@ -877,7 +743,7 @@ button:focus-visible {
   max-width: 470px;
   overflow: hidden;
   color: var(--muted);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 10px;
   letter-spacing: 0.08em;
   text-overflow: ellipsis;
@@ -891,7 +757,7 @@ button:focus-visible {
 
 .server-select__trigger span {
   color: var(--muted);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 9px;
   letter-spacing: 0.14em;
 }
@@ -901,7 +767,7 @@ button:focus-visible {
   padding: 5px 7px;
   border: 1px solid rgba(134, 169, 110, 0.42);
   color: #a7c393;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 9px;
   font-style: normal;
   font-weight: 600;
@@ -914,7 +780,7 @@ button:focus-visible {
   align-items: center;
   gap: 7px;
   color: var(--paper-dim);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -964,7 +830,7 @@ button:focus-visible {
 }
 
 .server-select__trigger i.is-admin {
-  border-color: rgba(230, 64, 52, 0.5);
+  border-color: rgba(225, 6, 0, 0.5);
   color: #ef746a;
 }
 
@@ -1013,7 +879,7 @@ button:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 20px;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-weight: 700;
   font-size: 30px;
   letter-spacing: 0.08em;
@@ -1060,7 +926,7 @@ button:focus-visible {
 }
 
 .error-toast strong {
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 11px;
   letter-spacing: 0.13em;
   color: var(--signal);
@@ -1110,7 +976,7 @@ button:focus-visible {
 }
 
 .update-banner__text strong {
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 11px;
   letter-spacing: 0.13em;
   color: var(--paper);
@@ -1144,7 +1010,7 @@ button:focus-visible {
   border: 1px solid var(--line);
   background: transparent;
   color: var(--paper);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 11px;
   letter-spacing: 0.13em;
   cursor: pointer;
@@ -1191,9 +1057,9 @@ button:focus-visible {
   padding: 46px 42px 30px;
   overflow-y: auto;
   background:
-    linear-gradient(145deg, rgba(230, 64, 52, 0.035), transparent 28%),
-    #10100f;
-  border-left: 1px solid rgba(238, 236, 228, 0.17);
+    linear-gradient(145deg, rgba(225, 6, 0, 0.035), transparent 28%),
+    #0d0d0d;
+  border-left: 1px solid rgba(255, 255, 255, 0.17);
   box-shadow: -22px 0 70px rgba(0, 0, 0, 0.38);
 }
 
@@ -1205,9 +1071,9 @@ button:focus-visible {
   padding: 54px 42px 34px;
   overflow-y: auto;
   background:
-    linear-gradient(145deg, rgba(230, 64, 52, 0.045), transparent 31%),
-    #10100f;
-  border-left: 1px solid rgba(238, 236, 228, 0.17);
+    linear-gradient(145deg, rgba(225, 6, 0, 0.045), transparent 31%),
+    #0d0d0d;
+  border-left: 1px solid rgba(255, 255, 255, 0.17);
   box-shadow: -22px 0 70px rgba(0, 0, 0, 0.38);
 }
 
@@ -1220,7 +1086,7 @@ button:focus-visible {
 
 .identity-panel h2 {
   margin: 0;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 39px;
   line-height: 0.96;
   letter-spacing: -0.015em;
@@ -1275,7 +1141,7 @@ button:focus-visible {
 }
 
 .identity-extra__toggle strong {
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -1283,7 +1149,7 @@ button:focus-visible {
 
 .identity-extra__toggle em {
   color: var(--muted);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 9px;
   font-style: normal;
   letter-spacing: 0.12em;
@@ -1310,7 +1176,7 @@ button:focus-visible {
 }
 
 .identity-extra__server > header strong {
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -1324,7 +1190,7 @@ button:focus-visible {
   border: 0;
   background: transparent;
   color: var(--signal);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.09em;
@@ -1365,7 +1231,7 @@ button:focus-visible {
   top: 1px;
   left: 0;
   color: var(--signal);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -1387,7 +1253,7 @@ button:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.11em;
@@ -1409,7 +1275,7 @@ button:focus-visible {
   gap: 12px;
   margin-bottom: 8px;
   color: var(--muted);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -1439,12 +1305,12 @@ button:focus-visible {
 }
 
 .identity-key-field:focus-within {
-  border-color: rgba(230, 64, 52, 0.72);
+  border-color: rgba(225, 6, 0, 0.72);
   box-shadow: inset 2px 0 var(--signal);
 }
 
 .identity-key-field.has-error {
-  border-color: rgba(230, 64, 52, 0.72);
+  border-color: rgba(225, 6, 0, 0.72);
 }
 
 .identity-key-field > svg {
@@ -1471,7 +1337,7 @@ button:focus-visible {
 
 .identity-key-field__count {
   color: #686762;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 9px;
   letter-spacing: 0.08em;
 }
@@ -1510,7 +1376,7 @@ button:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 9px;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -1572,7 +1438,7 @@ button:focus-visible {
   display: block;
   margin-bottom: 10px;
   color: var(--signal);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.17em;
@@ -1580,7 +1446,7 @@ button:focus-visible {
 
 .install-panel h2 {
   margin: 0;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 37px;
   line-height: 0.98;
   letter-spacing: -0.015em;
@@ -1614,8 +1480,8 @@ button:focus-visible {
   display: flex;
   gap: 14px;
   padding: 14px 15px;
-  border: 1px solid rgba(230, 64, 52, 0.2);
-  background: rgba(230, 64, 52, 0.045);
+  border: 1px solid rgba(225, 6, 0, 0.2);
+  background: rgba(225, 6, 0, 0.045);
 }
 
 .safety-note > svg {
@@ -1630,7 +1496,7 @@ button:focus-visible {
 }
 
 .safety-note strong {
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 11px;
   letter-spacing: 0.11em;
 }
@@ -1685,7 +1551,7 @@ button:focus-visible {
   place-items: center;
   background: #292927;
   color: var(--muted);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 10px;
   font-weight: 600;
 }
@@ -1707,7 +1573,7 @@ button:focus-visible {
 }
 
 .install-step__copy strong {
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 12px;
   letter-spacing: 0.08em;
 }
@@ -1715,7 +1581,7 @@ button:focus-visible {
 .install-step__copy small {
   overflow: hidden;
   color: var(--muted);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 9px;
   letter-spacing: 0.04em;
   text-overflow: ellipsis;
@@ -1724,7 +1590,7 @@ button:focus-visible {
 
 .install-step__action {
   color: var(--signal);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -1733,9 +1599,9 @@ button:focus-visible {
 .install-step__badge {
   margin-left: 8px;
   padding: 2px 7px;
-  border: 1px solid rgba(230, 64, 52, 0.35);
+  border: 1px solid rgba(225, 6, 0, 0.35);
   border-radius: 999px;
-  background: rgba(230, 64, 52, 0.1);
+  background: rgba(225, 6, 0, 0.1);
   color: var(--signal);
   font-size: 9px;
   font-weight: 600;
@@ -1761,7 +1627,7 @@ button:focus-visible {
   border: 0;
   background: var(--signal);
   color: white;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 17px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -1797,7 +1663,7 @@ button:focus-visible {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 11px;
   letter-spacing: 0.11em;
 }
@@ -1831,7 +1697,7 @@ button:focus-visible {
   margin: 10px 0 12px;
   overflow: hidden;
   color: var(--muted);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 9px;
   letter-spacing: 0.05em;
   text-overflow: ellipsis;
@@ -1843,7 +1709,7 @@ button:focus-visible {
   border: 0;
   background: transparent;
   color: var(--signal);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -1866,7 +1732,7 @@ button:focus-visible {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 11px;
   letter-spacing: 0.11em;
 }
@@ -1900,7 +1766,7 @@ button:focus-visible {
 .asset-section__version {
   display: block;
   color: var(--paper-dim);
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--display);
   font-size: 10px;
   letter-spacing: 0.06em;
 }
@@ -1938,31 +1804,70 @@ button:focus-visible {
   accent-color: var(--signal);
 }
 
+/* Shared surfaces keep the same black / white / red hierarchy as rotk.app. */
+.window-chrome { height: 72px; background: rgba(6,6,6,.94); }
+.window-chrome__drag { padding-left: var(--gutter); gap: 25px; }
+.window-chrome__section { color: var(--paper); font-size: 10px; letter-spacing: .1em; }
+.window-chrome__section::after { content: ""; display: block; width: 24px; height: 2px; background: var(--signal); margin-top: 6px; }
+.chrome-link { padding-inline: 22px; font-size: 10px; }
+.chrome-version { font-size: 9px; }
+.language-picker__trigger { font-size: 10px; }
+.launcher-footer { grid-template-columns: minmax(230px, 1fr) minmax(360px, 1.25fr) 104px 252px; background: #0b0b0b; }
+.launcher-footer__status { display: flex; align-items: center; gap: 16px; padding: 0 26px 0 var(--gutter); }
+.launcher-footer__status strong, .server-select__trigger strong { font-size: 14px; letter-spacing: .035em; }
+.launcher-footer__status small { font-family: "Inter", sans-serif; font-size: 9px; letter-spacing: 0; }
+.server-select__trigger { padding-inline: 22px; gap: 12px; }
+.server-select__trigger > div > span { font-size: 9px; letter-spacing: .09em; }
+.server-select__trigger i { font-size: 8px; letter-spacing: .04em; }
+.server-select__trigger .server-population { font-family: "Inter", sans-serif; font-size: 11px; letter-spacing: 0; }
+.server-select__trigger .server-population small { font-size: 8px; letter-spacing: 0; }
+.server-select__menu { min-width: 360px; background: #101010; }
+.server-select__group > header strong { font-size: 12px; letter-spacing: .02em; }
+.server-select__group button { min-height: 44px; }
+.server-select__group button span { font-size: 11px; letter-spacing: .02em; }
+.server-select__group button em { font-size: 9px; letter-spacing: .02em; }
+.play-button { padding: 16px 24px; justify-content: space-between; gap: 12px; }
+.play-button__copy { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; text-align: left; }
+.play-button__copy small { font-size: 8px; letter-spacing: .1em; font-weight: 400; }
+.play-button__copy strong { font-size: 22px; letter-spacing: 0; line-height: 1.1; }
+.play-button > svg { flex: 0 0 auto; width: 22px; }
+.play-button:not(:disabled):hover { background: var(--signal-dark); }
+.play-button:not(:disabled)::before { display: none; }
+.play-button:not(:disabled) > svg { transition: transform .2s ease; }
+.play-button:not(:disabled):hover > svg { transform: translateX(4px); }
+.install-panel, .identity-panel { background: #0d0d0d; }
+.install-panel h2, .identity-panel h2 { font-size: 31px; line-height: 1.1; letter-spacing: -.02em; }
+.install-panel__intro, .identity-panel__intro { color: #b8b8b8; }
+.boot-screen { background: var(--ink); }
+.boot-screen img { width: 60px; height: 72px; }
+
 @media (max-width: 1160px) {
-  .activity-center {
-    width: min(650px, calc(100vw - 250px));
-  }
+  :root { --gutter: 32px; }
+  .chrome-version { display: none; }
+  .launcher-footer { grid-template-columns: minmax(230px, 1fr) minmax(340px, 1.2fr) 96px 230px; }
+  .launcher-footer__status { padding-right: 20px; gap: 12px; }
+  .server-select__trigger { padding-inline: 18px; gap: 9px; }
+  .server-select__trigger > svg:first-child { display: none; }
+  .play-button { padding-inline: 20px; }
+  .news-carousel__news { width: min(720px, calc(100% - 200px)); }
+  .activity-center { width: min(650px, calc(100vw - 250px)); }
+  .activity-card__heading span { display: none; }
+}
 
-  .activity-card__heading span {
-    display: none;
-  }
+@media (min-height: 701px) and (max-height: 740px) {
+  .launcher-brand h1 img { max-width: 540px; }
+}
 
-  .launcher-footer {
-    grid-template-columns: minmax(300px, 1fr) 245px 104px 220px;
-  }
-
-  .launcher-footer__status,
-  .launcher-footer__server {
-    padding-inline: 20px;
-  }
-
-  .news-carousel__content {
-    left: 52px;
-  }
-
-  .chrome-version {
-    display: none;
-  }
+@media (max-height: 700px) {
+  .launcher-brand { top: 104px; width: 47%; }
+  .launcher-brand h1 { margin-block: 12px; }
+  .launcher-brand h1 img { max-width: 485px; }
+  .launcher-brand p { font-size: 22px; }
+  .news-carousel__news { bottom: 20px; }
+  .news-carousel__heading { padding-top: 12px; margin-bottom: 12px; }
+  .news-carousel__content { min-height: 116px; grid-template-columns: 144px minmax(0,1fr); gap: 20px; }
+  .news-carousel__thumbnail { height: 100px; }
+  .news-carousel__content h2 { font-size: 20px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
