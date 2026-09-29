@@ -1,7 +1,8 @@
 # Audit client : corrections du 29 septembre 2026
 
 Base launcher : `8f82770`, branche `fix/audit-launcher-performance-20260929`.
-Les changements sont préparés et testés, sans publication. Aucun fichier
+Correctifs proposés dans la [PR #83](https://github.com/h1z1rotk/rotk-launcher/pull/83),
+commit validé localement : `fe6cc58`. Aucun fichier
 propriétaire nouveau ; les deux proxies embarqués sont reconstruits depuis leurs
 sources avec Zig 0.15.2. Aucune installation de jeu modifiée.
 
@@ -57,8 +58,16 @@ Ne pas annoncer « Vivox désormais non bloquant » ni « tous les FPS corrigés
 
 ## Vérifications exécutées
 
-Windows x64, Node 22.17.1, Zig 0.15.2, dépendances déjà disponibles ; aucune
-installation de dépendance. Le problème du wrapper npm utilisateur a été
+Windows x64, Node 22.17.1, Zig 0.15.2, dépendances npm déjà disponibles.
+Pour la validation finale, SDK .NET **10.0.401** installé dans un répertoire local
+avec le [script officiel Microsoft](https://dot.net/v1/dotnet-install.ps1),
+`-Channel 10.0 -Architecture x64 -NoPath` et `-InstallDir` explicite.
+Signature Authenticode Microsoft valide, sources et comportement relus avant
+exécution ; SHA-256 du script :
+`e8b873e18a81e5c4cd8ab69d84dac8fead291d50b3c44633cd7fddad709a13d6`.
+`PATH` et `DOTNET_ROOT` limités au processus ; caches .NET/NuGet locaux à la copie
+de travail, restauration NuGet réussie. Aucune installation globale.
+Le problème du wrapper npm utilisateur a été
 contourné avec un préfixe/cache propres à la copie de travail.
 
 - `npm run typecheck` : réussi.
@@ -72,18 +81,23 @@ contourné avec un préfixe/cache propres à la copie de travail.
 - DirectInput reconstruit deux fois avec égalité SHA-256 ; Vivox reconstruit dans
   deux chemins de sortie distincts avec égalité SHA-256. Vérificateurs et sidecars
   cohérents avec les pins TypeScript/CI/release. `git diff --check` : réussi.
-- Le pipeline `npm run build` complet n’est pas exécuté : `dotnet --list-sdks`
-  ne retourne que **9.0.318**, alors que `native/RotkDeathcomm/RotkDeathcomm.csproj`
-  cible `net10.0-windows`. `build:deathcomm` nécessite donc un SDK .NET 10 absent ;
-  aucun SDK installé et aucun changement de cible pour contourner ce prérequis.
-  À reprendre sur un poste équipé : `npm run build` (publication .NET locale,
-  tests Deathcomm puis contrôles et builds Electron/renderer).
-  Ce script ne crée pas lui-même le paquet Electron : le packaging local reste
-  également non validé. Aucun nouveau test en jeu ni déploiement.
+- **`npm run build` complet : réussi, code 0, sur `fe6cc58`.** Vérification
+  PresentMon, compilation diagnostics, publication .NET locale de Deathcomm,
+  tests Deathcomm (sans périphérique audio physique), typecheck, suite complète
+  (404 Vitest réussis / 3 ignorés et 18/18 diagnostics), Electron et renderer.
+  L’absence initiale de .NET 10 est résolue par le SDK local, sans changer les
+  sources ni la cible du projet. Aucun changement suivi produit par le build.
+  Log conservé dans `.dev-data/validation-final/npm-build.log`, SHA-256 :
+  `745ec16f34e374cb76022a97818cb8b93e65f065c0a657d447a70cca74a923cb`.
+  Version SDK et code retour dans `dotnet-info.log` et `build-result.log` du même
+  répertoire ignoré. Ces logs locaux ne sont pas ajoutés au dépôt.
+- `npm run build` ne crée pas le paquet Electron ; aucune commande `dist`,
+  publication externe, installation du launcher ou nouvelle recette en jeu.
 
-Statut de remise : **prêt pour revue et ouverture de PR**, sans commit ni push ;
-validation complète avant diffusion conditionnée au build avec .NET 10, au
-packaging local et à la recette en jeu. C7 reste partiel comme décrit ci-dessus.
+Statut de remise : **build complet local validé, prêt pour poursuite de revue de
+la PR #83**. Cette vérification ne vaut pas exécution de GitHub CI. Seule cette
+documentation change après `fe6cc58` ; packaging et
+recette en jeu restent à valider avant diffusion. C7 reste partiel.
 
 Artefacts open source produits :
 
