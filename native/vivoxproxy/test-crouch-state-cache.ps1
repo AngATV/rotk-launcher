@@ -45,3 +45,11 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Host "Verified crouch state cache: $output"
+
+$transitionOutput = Join-Path $outputDirectory "crouch_transition_test.exe"
+& $zig.Source cc -target x86_64-windows-gnu -O2 -Wall -Wextra -Werror `
+    -DROTK_VIVOX_V5_COMPAT=1 -o $transitionOutput `
+    (Join-Path $PSScriptRoot "tests\crouch_transition_test.c") -lwinhttp -lshell32
+if ($LASTEXITCODE -ne 0) { throw "Crouch transition test build failed." }
+& $transitionOutput
+if ($LASTEXITCODE -ne 0) { throw "Crouch transition tests failed." }

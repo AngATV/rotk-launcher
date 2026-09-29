@@ -6,13 +6,13 @@ import { resolve } from "node:path";
 // Pinned release input, built from native/vivoxproxy since launcher 2.0.19 (fixed in 2.0.20)
 // (npm run build:vivox:source, then copied here). CI rebuilds the sources twice
 // and requires the same hash; a source build into dist/ never replaces it.
-const expected = "199f0d288f5bec010c5cf20802eb1dc162d27a05b57699268666e93575fec6dd";
+const expected = "c80c1d553a9be09202928c2b4b1646809a1bde788f720665c1f514fab0f2a8eb";
 const proxyPath = resolve(process.argv[2] ?? "resources/patches/vivoxsdk_x64.dll");
 const [binary, sidecar] = await Promise.all([
   readFile(proxyPath),
   readFile(`${proxyPath}.sha256`, "utf8"),
 ]);
-assert.equal(binary.length, 71680, "Unexpected Vivox proxy size");
+assert.equal(binary.length, 73216, "Unexpected Vivox proxy size");
 assert.equal(createHash("sha256").update(binary).digest("hex"), expected,
   "The supplied Vivox release proxy has changed");
 assert.equal(sidecar.trim().split(/\s+/u)[0], expected,

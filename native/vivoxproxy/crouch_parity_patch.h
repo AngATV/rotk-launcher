@@ -13,6 +13,7 @@
 #include <stdarg.h>
 
 #include "crouch_state_cache.h"
+#include "crouch_transition.h"
 
 #define CROUCH_MARKER_NAME L"rotk-crouch-parity.ini"
 #define CROUCH_LOG_NAME L"rotk-crouch-parity.log"
@@ -26,10 +27,6 @@
 #define CROUCH_SCALE_PITCH_Y_RVA ((uintptr_t)0x04457128U)
 #define CROUCH_EXPECTED_TIMESTAMP 0x5d56e9abU
 #define CROUCH_EXPECTED_IMAGE_SIZE 0x072b4000U
-#define CROUCH_IDLE_ENTER_SECONDS 0.4000000059604645
-#define CROUCH_IDLE_EXIT_SECONDS 0.20000000298023224
-#define CROUCH_MOVE_SECONDS 0.25
-#define CROUCH_MOVE_RECENT_SECONDS 0.10000000149011612
 
 typedef enum crouch_mode {
     CROUCH_MODE_DISABLED = 0,
@@ -480,35 +477,6 @@ static BOOL crouch_validate_state_identity(
         confirmed_control_generation == control_generation;
 }
 
-static float crouch_current_transition_value(
-    crouch_transition_state *state,
-    int64_t now_counter,
-    BOOL *completed) {
-    double duration = state->duration_seconds;
-    double elapsed = (double)(now_counter - state->start_counter) /
-                     (double)g_crouch_qpc_frequency.QuadPart;
-    double unit;
-    double blend;
-
-    *completed = FALSE;
-    if (elapsed <= 0.0) {
-        return state->start_output;
-    }
-    if (duration <= 0.0) {
-        *completed = TRUE;
-        return state->target;
-    }
-    unit = elapsed / duration;
-    if (unit >= 1.0) {
-        *completed = TRUE;
-        return state->target;
-    }
-    blend = (1.0 - cos(3.14159265358979323846 * unit)) * 0.5;
-    return (float)((double)state->start_output +
-                   ((double)state->target -
-                    (double)state->start_output) * blend);
-}
-
 static BOOL crouch_should_log_cache_count(LONG count) {
     return count > 0L &&
         (count <= 8L || (count & (count - 1L)) == 0L);
@@ -689,10 +657,6 @@ static uint16_t crouch_blend_weight_hook(
         cache_event_count = InterlockedIncrement(
             &g_crouch_state_reset_count);
     }
-    if (node_id == CROUCH_MOVE_NODE_ID) {
-        state->last_move_counter = now.QuadPart;
-        state->move_seen = TRUE;
-    }
     if (!state->initialized) {
         float desired = control >= 0.5f ? 1.0f : 0.0f;
 
@@ -706,57 +670,49 @@ static uint16_t crouch_blend_weight_hook(
         state->transition_end_counter = 0;
         state->initialized = TRUE;
         output = desired;
+        if (node_id == CROUCH_MOVE_NODE_ID) {
+            state->last_move_counter = now.QuadPart;
+            state->move_seen = TRUE;
+        }
     } else {
         BOOL completed = FALSE;
         float desired = control >= 0.5f ? 1.0f : 0.0f;
 
         if (state->transitioning) {
-            output = crouch_current_transition_value(
+            output = crouch_transition_evaluate(
                 state,
                 now.QuadPart,
+                g_crouch_qpc_frequency.QuadPart,
                 &completed);
             if (completed) {
-                state->transitioning = FALSE;
-                state->transition_end_counter = 0;
                 log_completed = TRUE;
                 logged_complete_target = state->target;
             }
         } else {
             output = state->target;
         }
-        if (!state->transitioning) {
-            if (desired != state->target) {
-                double since_move = state->move_seen
-                    ? (double)(now.QuadPart -
-                               state->last_move_counter) /
-                          (double)g_crouch_qpc_frequency.QuadPart
-                    : CROUCH_MOVE_RECENT_SECONDS + 1.0;
+        /* Current pose is evaluated before either input changes its future. */
+        if (node_id == CROUCH_MOVE_NODE_ID) {
+            state->last_move_counter = now.QuadPart;
+            state->move_seen = TRUE;
+        }
+        if (desired != state->target) {
+            double since_move = state->move_seen
+                ? (double)(now.QuadPart - state->last_move_counter) /
+                      (double)g_crouch_qpc_frequency.QuadPart
+                : 2.0 * CROUCH_MOVE_RECENT_SECONDS;
 
-                logged_moving = node_id == CROUCH_MOVE_NODE_ID ||
-                    (since_move >= 0.0 &&
-                     since_move <= CROUCH_MOVE_RECENT_SECONDS);
-                state->start_output = state->target;
-                state->target = desired;
-                state->duration_seconds = logged_moving
-                    ? CROUCH_MOVE_SECONDS
-                    : (desired > 0.5f
-                        ? CROUCH_IDLE_ENTER_SECONDS
-                        : CROUCH_IDLE_EXIT_SECONDS);
-                state->start_counter = now.QuadPart;
-                state->transition_end_counter = now.QuadPart +
-                    (int64_t)(
-                        state->duration_seconds *
-                        (double)g_crouch_qpc_frequency.QuadPart +
-                        0.5);
-                state->transitioning = TRUE;
-                output = state->start_output;
-                log_started = TRUE;
-                logged_target = desired;
-                logged_start = output;
-                logged_control = control;
-                logged_duration_ms = (unsigned int)(
-                    state->duration_seconds * 1000.0 + 0.5);
-            }
+            logged_moving = since_move >= 0.0 &&
+                since_move < 2.0 * CROUCH_MOVE_RECENT_SECONDS;
+            crouch_transition_start(state, output, desired,
+                now.QuadPart, g_crouch_qpc_frequency.QuadPart);
+            output = state->start_output;
+            log_started = TRUE;
+            logged_target = desired;
+            logged_start = output;
+            logged_control = control;
+            logged_duration_ms = (unsigned int)(
+                state->duration_seconds * 1000.0 + 0.5);
         }
         state->last_raw = raw;
         state->last_control = control;
@@ -799,7 +755,7 @@ static uint16_t crouch_blend_weight_hook(
         crouch_log(
             "[crouch-parity] blend transition start "
             "network=%p sourceNode=%u from=%.6f target=%.3f "
-            "control=%.3f durationMs=%u moving=%s",
+            "control=%.3f estimatedDurationMs=%u movingInfluence=%s",
             network,
             (unsigned int)node_id,
             (double)logged_start,
@@ -931,7 +887,7 @@ static int crouch_install_runtime_patch(void) {
         return -1;
     }
     crouch_log(
-        "[crouch-parity] patch-v2 ADS-safe v12 installed image=%p "
+        "[crouch-parity] patch-v2 ADS-safe v13 installed image=%p "
         "animationRva=0x%llx cameraRva=0x%llx "
         "idleEnterMs=400 idleExitMs=200 moveMs=250 "
         "stateCapacity=%u staleMs=2000 camera=%s",
@@ -948,7 +904,7 @@ static DWORD WINAPI crouch_patch_worker(LPVOID parameter) {
     BOOL node_ready = FALSE;
 
     (void)parameter;
-    crouch_log("[crouch-parity] patch-v2 ADS-safe v12 worker started");
+    crouch_log("[crouch-parity] patch-v2 ADS-safe v13 worker started");
     if (!crouch_validate_h1z1_image(&g_crouch_image_base)) {
         return 0U;
     }
