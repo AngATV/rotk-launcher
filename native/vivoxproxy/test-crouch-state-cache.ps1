@@ -45,3 +45,10 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Host "Verified crouch state cache: $output"
+
+$hookTest = Join-Path $outputDirectory "crouch_hook_io_test.exe"
+& $zig.Source cc -target x86_64-windows-gnu -O2 -Wall -Wextra -Werror `
+    -o $hookTest (Join-Path $PSScriptRoot "tests\crouch_hook_io_test.c") -lwinhttp -lshell32
+if ($LASTEXITCODE -ne 0) { throw "Crouch hook I/O test build failed" }
+& $hookTest
+if ($LASTEXITCODE -ne 0) { throw "Crouch hook I/O test failed" }

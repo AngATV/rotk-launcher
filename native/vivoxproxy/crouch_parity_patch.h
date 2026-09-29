@@ -59,8 +59,11 @@ static volatile LONG g_crouch_state_out_of_order_count;
 static uintptr_t g_crouch_image_base;
 static void *g_crouch_original_blend_trampoline;
 static BOOL g_crouch_enable_camera;
+/* Detailed per-network disk traces are opt-in, never part of normal animation. */
+static BOOL g_crouch_transition_trace;
 static LARGE_INTEGER g_crouch_qpc_frequency;
 static SRWLOCK g_crouch_state_lock = SRWLOCK_INIT;
+static size_t g_crouch_state_hints[CROUCH_STATE_CAPACITY];
 static crouch_transition_state
     g_crouch_states[CROUCH_STATE_CAPACITY];
 
@@ -231,6 +234,7 @@ static crouch_mode crouch_read_mode(void) {
     }
     CloseHandle(file);
     contents[read_bytes] = '\0';
+    g_crouch_transition_trace = strstr(contents, "transitionTrace=1") != NULL;
     if (strstr(contents, "mode=patch-v2") != NULL) {
         g_crouch_enable_camera =
             strstr(contents, "cameraScalePitch=direct") != NULL;
@@ -638,8 +642,10 @@ static uint16_t crouch_blend_weight_hook(
         CROUCH_STATE_STALE_SECONDS *
         (double)g_crouch_qpc_frequency.QuadPart +
         0.5);
-    state = crouch_state_cache_acquire(
+    state = crouch_state_cache_acquire_hint(
         g_crouch_states,
+        CROUCH_STATE_CAPACITY,
+        g_crouch_state_hints,
         CROUCH_STATE_CAPACITY,
         network,
         network_generation,
@@ -656,7 +662,7 @@ static uint16_t crouch_blend_weight_hook(
             ? &g_crouch_state_out_of_order_count
             : &g_crouch_state_pressure_count);
         ReleaseSRWLockExclusive(&g_crouch_state_lock);
-        if (crouch_should_log_cache_count(cache_event_count)) {
+        if (g_crouch_transition_trace && crouch_should_log_cache_count(cache_event_count)) {
             crouch_log(
                 "[crouch-parity] state cache %s count=%ld "
                 "capacity=%u network=%p generation=%p controlGeneration=%p; "
@@ -763,7 +769,7 @@ static uint16_t crouch_blend_weight_hook(
         state->last_output = output;
     }
     ReleaseSRWLockExclusive(&g_crouch_state_lock);
-    if ((cache_lookup.event == CROUCH_STATE_CACHE_EVICTED ||
+    if (g_crouch_transition_trace && (cache_lookup.event == CROUCH_STATE_CACHE_EVICTED ||
          cache_lookup.event == CROUCH_STATE_CACHE_STALE_RESET ||
          cache_lookup.event == CROUCH_STATE_CACHE_GENERATION_RESET) &&
         crouch_should_log_cache_count(cache_event_count)) {
@@ -787,7 +793,7 @@ static uint16_t crouch_blend_weight_hook(
             (void *)network_generation,
             (void *)control_generation);
     }
-    if (log_completed) {
+    if (g_crouch_transition_trace && log_completed) {
         crouch_log(
             "[crouch-parity] blend transition complete "
             "network=%p sourceNode=%u target=%.3f",
@@ -795,7 +801,7 @@ static uint16_t crouch_blend_weight_hook(
             (unsigned int)node_id,
             (double)logged_complete_target);
     }
-    if (log_started) {
+    if (g_crouch_transition_trace && log_started) {
         crouch_log(
             "[crouch-parity] blend transition start "
             "network=%p sourceNode=%u from=%.6f target=%.3f "
@@ -808,7 +814,7 @@ static uint16_t crouch_blend_weight_hook(
             logged_duration_ms,
             logged_moving ? "yes" : "no");
     }
-    if (call_sequence <= 16LL) {
+    if (g_crouch_transition_trace && call_sequence <= 16LL) {
         crouch_log(
             "[crouch-parity] blend hook call=%lld node=%u raw=%.6f "
             "events=%.6f sampled=%.6f sync=%.6f control=%.6f "
@@ -931,7 +937,7 @@ static int crouch_install_runtime_patch(void) {
         return -1;
     }
     crouch_log(
-        "[crouch-parity] patch-v2 ADS-safe v12 installed image=%p "
+        "[crouch-parity] patch-v2 ADS-safe v12-perf1 installed image=%p "
         "animationRva=0x%llx cameraRva=0x%llx "
         "idleEnterMs=400 idleExitMs=200 moveMs=250 "
         "stateCapacity=%u staleMs=2000 camera=%s",
@@ -948,7 +954,7 @@ static DWORD WINAPI crouch_patch_worker(LPVOID parameter) {
     BOOL node_ready = FALSE;
 
     (void)parameter;
-    crouch_log("[crouch-parity] patch-v2 ADS-safe v12 worker started");
+    crouch_log("[crouch-parity] patch-v2 ADS-safe v12-perf1 worker started");
     if (!crouch_validate_h1z1_image(&g_crouch_image_base)) {
         return 0U;
     }
